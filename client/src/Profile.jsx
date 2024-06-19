@@ -14,6 +14,15 @@ const Profile = ({ user, handleLogout }) => {
   const [eventToEdit, setEventToEdit] = useState(null);
   const [eventCreated, setEventCreated] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [staticPost, setStaticPost] = useState({
+    title: "Naujenu Svente",
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac lacinia lectus. Integer in est ipsum. Duis sit amet purus nec purus sollicitudin auctor. Nulla non orci a nisl auctor accumsan. Duis scelerisque egestas ante, vitae eleifend nisl lacinia ut.",
+    category: "Kiti",
+    time: "2024-06-19T12:00",
+    place: "Internet",
+    photo: "https://via.placeholder.com/150",
+  });
 
   useEffect(() => {
     fetchUserEvents();
@@ -22,6 +31,7 @@ const Profile = ({ user, handleLogout }) => {
 
   const fetchUserEvents = async () => {
     try {
+      // Replace with actual endpoint to fetch user's events
       const response = await fetch(`api/events?organizer_id=${user.id}`);
       if (!response.ok) {
         throw new Error("Failed to fetch events");
@@ -257,46 +267,32 @@ const Profile = ({ user, handleLogout }) => {
                 </form>
               </div>
             </div>
+            {/* Removed the card with "DELETE THIS CARD" */}
             <div className="card mb-4">
               <div className="card-body">
-                <h3 className="mb-4">Mano renginiai</h3>
-                <div className="list-group">
-                  {events.map((event) => (
-                    <div key={event.id} className="list-group-item">
-                      <h5>{event.name}</h5>
-                      <p>
-                        <strong>Kategorija:</strong> {event.category}
-                      </p>
-                      <p>
-                        <strong>Laikas:</strong> {event.time}
-                      </p>
-                      <p>
-                        <strong>Vieta:</strong> {event.place}
-                      </p>
-                      {event.photo && (
-                        <img
-                          src={event.photo}
-                          alt={event.name}
-                          className="img-fluid mb-2"
-                          style={{ maxHeight: "150px" }}
-                        />
-                      )}
-                      <div>
-                        <button
-                          className="btn btn-sm btn-info mr-2"
-                          onClick={() => handleEditClick(event)}
-                        >
-                          Redaguoti
-                        </button>
-                        <button
-                          className="btn btn-sm btn-danger"
-                          onClick={() => handleEventDelete(event.id)}
-                        >
-                          Ištrinti
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                <h3 className="mb-4">Renginiai</h3>
+                <div className="card">
+                  <div className="card-body">
+                    <h5 className="card-title">{staticPost.title}</h5>
+                    <p className="card-text">{staticPost.content}</p>
+                    <p className="card-text">
+                      <strong>Kategorija:</strong> {staticPost.category}
+                    </p>
+                    <p className="card-text">
+                      <strong>Laikas:</strong> {staticPost.time}
+                    </p>
+                    <p className="card-text">
+                      <strong>Vieta:</strong> {staticPost.place}
+                    </p>
+                    {staticPost.photo && (
+                      <img
+                        src={staticPost.photo}
+                        alt={staticPost.title}
+                        className="img-fluid mb-2"
+                        style={{ maxHeight: "150px" }}
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

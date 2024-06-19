@@ -1,6 +1,7 @@
 make sure kad admine loggina stuff
 daugiau prie renginio prideti kuris meta i sign up jeigu neprisiloggine
-
-admin - gali patvirtinti rengini, blokuoti netinkama turini ir Vartotojus, ivesti renginiu kategorijas.
+endpoint categams
 user - gali prideti rengini: nurodydamas pavadinima, kategorija, laika, vieta, nuotrauka, gali koreguoti savo skelbimus, juos istrinti, 
-zvaogzdute korteles desineje - pauspaudimas issaugomas db, virs jos (zvaigzd) sumuojamas bendras reitingas/ paspaudinu skaicius.
+admin - gali patvirtinti rengini, blokuoti netinkama turini ir Vartotojus, ivesti renginiu kategorijas.
+ratings db
+remove cmtns
