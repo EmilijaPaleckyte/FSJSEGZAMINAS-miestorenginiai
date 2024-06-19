@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -165,7 +165,7 @@ const Profile = ({ user, handleLogout }) => {
                   src={pfp}
                   alt="User Profile"
                   className="rounded-circle mb-3"
-                  style={{ width: "120px", height: "120px" }}
+                  style={{ width: "150px", height: "180px" }}
                 />
                 <h2>{user.email}</h2>
                 <p>El. paštas: {user.email}</p>
