@@ -15,13 +15,13 @@ const Profile = ({ user, handleLogout }) => {
   const [eventCreated, setEventCreated] = useState(null);
   const [categories, setCategories] = useState([]);
   const [staticPost, setStaticPost] = useState({
-    title: "Naujenu Svente",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac lacinia lectus. Integer in est ipsum. Duis sit amet purus nec purus sollicitudin auctor. Nulla non orci a nisl auctor accumsan. Duis scelerisque egestas ante, vitae eleifend nisl lacinia ut.",
-    category: "Kiti",
-    time: "2024-06-19T12:00",
-    place: "Internet",
-    photo: "https://via.placeholder.com/150",
+    // title: "Naujenu Svente",
+    // content:
+    //   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac lacinia lectus. Integer in est ipsum. Duis sit amet purus nec purus sollicitudin auctor. Nulla non orci a nisl auctor accumsan. Duis scelerisque egestas ante, vitae eleifend nisl lacinia ut.",
+    // category: "Kiti",
+    // time: "2024-06-19T12:00",
+    // place: "Internet",
+    // photo: "https://via.placeholder.com/150",
   });
 
   useEffect(() => {
@@ -165,7 +165,7 @@ const Profile = ({ user, handleLogout }) => {
       <div className="container py-4">
         <div className="row">
           <div className="col-lg-4 col-md-5 mb-4">
-            <div className="card mb-4">
+            <div className="card mb-3">
               <div className="card-body text-center">
                 <img
                   src={pfp}
@@ -185,7 +185,7 @@ const Profile = ({ user, handleLogout }) => {
             </div>
           </div>
           <div className="col-lg-8 col-md-7">
-            <div className="card mb-4">
+            <div className="card mb-3">
               <div className="card-body">
                 <h3 className="mb-4">Sukurti naują renginį</h3>
                 <form
@@ -267,8 +267,7 @@ const Profile = ({ user, handleLogout }) => {
                 </form>
               </div>
             </div>
-            {/* Removed the card with "DELETE THIS CARD" */}
-            <div className="card mb-4">
+            <div className="card mb-3">
               <div className="card-body">
                 <h3 className="mb-4">Renginiai</h3>
                 <div className="card">
