@@ -2,12 +2,11 @@ UZDUOTIS - psl miesto gyventojams ir sveciams rast info apie mieste vykstancius 
 
 PAGAL roles galios - autorizacija ir pvz jei nori paziureti rengini turi prisijungti mesti, jei prisijunges mato (3 punktas)
 
-tada pridet user (guest neprisededa), admin ir tada see ar veikia
 make sure kad admine loggina usersius ir actions jc nereik
 
 admin - gali patvirtinti rengini, blokuoti netinkama turini ir Vartotojus, ivesti renginiu kategorijas.
 user - gali prideti rengini: nurodydamas pavadinima, kategorija, laika, vieta, nuotrauka, gali koreguoti savo skelbimus, juos istrinti, 
-zvaogzdute korteles desineje - pauspaudimas issaugomas db, virs jos (zvaigzd) sumuojamas bendras reitingas/ paspaudinu skaicius, crud.
+zvaogzdute korteles desineje - pauspaudimas issaugomas db, virs jos (zvaigzd) sumuojamas bendras reitingas/ paspaudinu skaicius.
 
 FRONTEND: 
 responsive
