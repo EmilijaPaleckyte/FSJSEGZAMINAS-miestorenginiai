@@ -49,7 +49,7 @@ function App() {
         />
         <Route path="/contacts" element={<Contacts />} />
         <Route path="/about" element={<About />} />
-        {/* Profile Route */}
+
         <Route
           path="/profile"
           element={
@@ -60,7 +60,7 @@ function App() {
             )
           }
         />
-        {/* Admin Dashboard Route */}
+
         <Route
           path="/admindash"
           element={
@@ -71,6 +71,7 @@ function App() {
             )
           }
         />
+
         <Route
           path="/admin"
           element={
@@ -81,7 +82,11 @@ function App() {
             )
           }
         />
-        <Route path="/post" element={<Post />} />
+
+        <Route
+          path="/post"
+          element={user ? <Post /> : <Navigate to="/login" replace />}
+        />
       </Routes>
     </BrowserRouter>
   );
