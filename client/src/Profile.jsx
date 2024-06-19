@@ -175,6 +175,12 @@ const Profile = ({ user, handleLogout }) => {
                 <Link to="/" className="btn btn-primary ml-3">
                   Į pagrindinį
                 </Link>
+                <button className="btn btn-primary">
+                  Redaguoti skelb.
+                </button>
+                <button className="btn btn-primary">
+                  Ištrinti skelb.
+                </button>
               </div>
             </div>
           </div>
@@ -184,7 +190,9 @@ const Profile = ({ user, handleLogout }) => {
                 <h3 className="mb-4">
                   {eventToEdit ? "Redaguoti renginį" : "Sukurti naują renginį"}
                 </h3>
-                <form onSubmit={eventToEdit ? handleEventUpdate : handleEventCreate}>
+                <form
+                  onSubmit={eventToEdit ? handleEventUpdate : handleEventCreate}
+                >
                   <div className="form-group">
                     <label htmlFor="eventName">Pavadinimas</label>
                     <input
@@ -277,7 +285,8 @@ const Profile = ({ user, handleLogout }) => {
                         <strong>Kategorija:</strong> {event.category}
                       </p>
                       <p className="card-text">
-                        <strong>Laikas:</strong> {new Date(event.time).toLocaleString()}
+                        <strong>Laikas:</strong>{" "}
+                        {new Date(event.time).toLocaleString()}
                       </p>
                       <p className="card-text">
                         <strong>Vieta:</strong> {event.place}
@@ -313,7 +322,8 @@ const Profile = ({ user, handleLogout }) => {
                       <strong>Kategorija:</strong> {staticPost.category}
                     </p>
                     <p className="card-text">
-                      <strong>Laikas:</strong> {new Date(staticPost.time).toLocaleString()}
+                      <strong>Laikas:</strong>{" "}
+                      {new Date(staticPost.time).toLocaleString()}
                     </p>
                     <p className="card-text">
                       <strong>Vieta:</strong> {staticPost.place}

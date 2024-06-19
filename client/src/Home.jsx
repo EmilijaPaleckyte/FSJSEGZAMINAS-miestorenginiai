@@ -165,7 +165,7 @@ const Home = () => {
                 <div className="card-header">
                   <span className="event-rating">
                     <i className="fas fa-star"></i> {event.rating} (
-                    {event.votes.length} balsai)
+                    {event.votes.length} balsas)
                   </span>
                 </div>
                 <div className="card-body">
@@ -186,6 +186,9 @@ const Home = () => {
                       </button>
                     ))}
                   </div>
+                  <Link to="/post" className="btn btn-primary">
+                    Daugiau...
+                  </Link>
                 </div>
               </div>
             ))}

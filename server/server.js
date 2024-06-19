@@ -304,8 +304,8 @@ app.post(
 
 // Events routes
 
-// Fetching all events (admin function)
-app.get("/admin/events", verifyToken, verifyRole(ROLES.ADMIN), (req, res) => {
+// Fetching all events
+app.get("/api/events", (req, res) => {
   const sql = "SELECT id, title, category, status FROM events";
 
   db.query(sql, (err, results) => {
@@ -317,60 +317,8 @@ app.get("/admin/events", verifyToken, verifyRole(ROLES.ADMIN), (req, res) => {
   });
 });
 
-// Approving event (admin function)
-app.put(
-  "/admin/events/:eventId/approve",
-  verifyToken,
-  verifyRole(ROLES.ADMIN),
-  (req, res) => {
-    const { eventId } = req.params;
-
-    const sql = "UPDATE events SET status = ? WHERE id = ?";
-    const values = ["approved", eventId];
-
-    db.query(sql, values, (err, result) => {
-      if (err) {
-        console.error(`Error approving event ${eventId}:`, err);
-        return res
-          .status(500)
-          .json({ Error: `Error approving event ${eventId}` });
-      }
-      res.json({
-        Status: "Success",
-        Message: `Event with id ${eventId} approved`,
-      });
-    });
-  }
-);
-
-// Blocking event (admin function)
-app.put(
-  "/admin/events/:eventId/block",
-  verifyToken,
-  verifyRole(ROLES.ADMIN),
-  (req, res) => {
-    const { eventId } = req.params;
-
-    const sql = "UPDATE events SET status = ? WHERE id = ?";
-    const values = ["blocked", eventId];
-
-    db.query(sql, values, (err, result) => {
-      if (err) {
-        console.error(`Error blocking event ${eventId}:`, err);
-        return res
-          .status(500)
-          .json({ Error: `Error blocking event ${eventId}` });
-      }
-      res.json({
-        Status: "Success",
-        Message: `Event with id ${eventId} blocked`,
-      });
-    });
-  }
-);
-
-// Create new event (admin function)
-app.post("/admin/events", verifyToken, verifyRole(ROLES.ADMIN), (req, res) => {
+// Creating event
+app.post("/api/events", (req, res) => {
   const { title, category } = req.body;
 
   if (!title || !category) {
@@ -391,62 +339,48 @@ app.post("/admin/events", verifyToken, verifyRole(ROLES.ADMIN), (req, res) => {
   });
 });
 
-// Update event (admin function)
-app.put(
-  "/admin/events/:eventId",
-  verifyToken,
-  verifyRole(ROLES.ADMIN),
-  (req, res) => {
-    const { eventId } = req.params;
-    const { title, category } = req.body;
+// Updating event
+app.put("/api/events/:eventId", (req, res) => {
+  const { eventId } = req.params;
+  const { title, category } = req.body;
 
-    if (!title || !category) {
-      return res.status(400).json({ Error: "Title and category are required" });
+  if (!title || !category) {
+    return res.status(400).json({ Error: "Title and category are required" });
+  }
+
+  const sql = "UPDATE events SET title = ?, category = ? WHERE id = ?";
+  const values = [title, category, eventId];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error(`Error updating event ${eventId}:`, err);
+      return res.status(500).json({ Error: `Error updating event ${eventId}` });
     }
-
-    const sql = "UPDATE events SET title = ?, category = ? WHERE id = ?";
-    const values = [title, category, eventId];
-
-    db.query(sql, values, (err, result) => {
-      if (err) {
-        console.error(`Error updating event ${eventId}:`, err);
-        return res
-          .status(500)
-          .json({ Error: `Error updating event ${eventId}` });
-      }
-      res.json({
-        Status: "Success",
-        Message: `Event with id ${eventId} updated`,
-      });
+    res.json({
+      Status: "Success",
+      Message: `Event with id ${eventId} updated`,
     });
-  }
-);
+  });
+});
 
-// Delete event (admin function)
-app.delete(
-  "/admin/events/:eventId",
-  verifyToken,
-  verifyRole(ROLES.ADMIN),
-  (req, res) => {
-    const { eventId } = req.params;
+// Deleting event
+app.delete("/api/events/:eventId", (req, res) => {
+  const { eventId } = req.params;
 
-    const sql = "DELETE FROM events WHERE id = ?";
-    const values = [eventId];
+  const sql = "DELETE FROM events WHERE id = ?";
+  const values = [eventId];
 
-    db.query(sql, values, (err, result) => {
-      if (err) {
-        console.error(`Error deleting event ${eventId}:`, err);
-        return res
-          .status(500)
-          .json({ Error: `Error deleting event ${eventId}` });
-      }
-      res.json({
-        Status: "Success",
-        Message: `Event with id ${eventId} deleted`,
-      });
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error(`Error deleting event ${eventId}:`, err);
+      return res.status(500).json({ Error: `Error deleting event ${eventId}` });
+    }
+    res.json({
+      Status: "Success",
+      Message: `Event with id ${eventId} deleted`,
     });
-  }
-);
+  });
+});
 
 // Start server
 app.listen(port, () => {

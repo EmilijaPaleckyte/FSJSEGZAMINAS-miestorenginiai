@@ -5,6 +5,7 @@ import AdminDashboard from "./AdminDash";
 import Contacts from "./Contacts";
 import Home from "./Home";
 import LogIn from "./LogIn";
+import Post from "./Post";
 import Profile from "./Profile";
 import Signup from "./Signup";
 import { useState } from "react";
@@ -80,6 +81,7 @@ function App() {
             )
           }
         />
+        <Route path="/post" element={<Post />} />
       </Routes>
     </BrowserRouter>
   );
