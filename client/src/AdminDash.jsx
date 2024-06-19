@@ -154,7 +154,6 @@ const AdminDashboard = () => {
             <th className="th">Username</th>
             <th className="th">Email</th>
             <th className="th">Role</th>
-            <th className="th">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -201,8 +200,6 @@ const AdminDashboard = () => {
             <tr>
               <th className="th">Title</th>
               <th className="th">Category</th>
-              <th className="th">Status</th>
-              <th className="th">Actions</th>
             </tr>
           </thead>
           <tbody>
