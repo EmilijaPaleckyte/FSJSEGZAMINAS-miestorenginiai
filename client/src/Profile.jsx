@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -6,31 +6,37 @@ import pfp from "./assets/pfp.png";
 
 const Profile = ({ user, handleLogout }) => {
   const [events, setEvents] = useState([]);
-  const [eventName, setEventName] = useState("");
-  const [eventCategory, setEventCategory] = useState("");
-  const [eventTime, setEventTime] = useState("");
-  const [eventPlace, setEventPlace] = useState("");
-  const [eventPhoto, setEventPhoto] = useState("");
+  const [eventData, setEventData] = useState({
+    name: "",
+    category: "",
+    time: "",
+    place: "",
+    photo: "",
+  });
   const [eventToEdit, setEventToEdit] = useState(null);
   const [eventCreated, setEventCreated] = useState(null);
-  const [categories, setCategories] = useState([]);
-  const [staticPost, setStaticPost] = useState({
+  const [categories, setCategories] = useState([
+    { id: 1, name: "Kultūra" },
+    { id: 2, name: "Muzika" },
+    { id: 3, name: "Sportas" },
+    { id: 4, name: "Festivaliai" },
+    { id: 5, name: "Kiti" },
+  ]);
+  const staticPost = {
     title: "Naujenu Svente",
     content: "This is some sort of a caption",
     category: "Kiti",
     time: "2024-06-19T12:00",
     place: "Internet",
     photo: "not uploaded",
-  });
+  };
 
   useEffect(() => {
     fetchUserEvents();
-    fetchEventCategories();
   }, []);
 
   const fetchUserEvents = async () => {
     try {
-    
       const response = await fetch(`api/events?organizer_id=${user.id}`);
       if (!response.ok) {
         throw new Error("Failed to fetch events");
@@ -42,27 +48,13 @@ const Profile = ({ user, handleLogout }) => {
     }
   };
 
-  const fetchEventCategories = async () => {
-    const fetchedCategories = [
-      { id: 1, name: "Kultūra" },
-      { id: 2, name: "Muzika" },
-      { id: 3, name: "Sportas" },
-      { id: 4, name: "Festivaliai" },
-      { id: 5, name: "Kiti" },
-    ];
-    setCategories(fetchedCategories);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEventData({ ...eventData, [name]: value });
   };
 
   const handleEventCreate = async (e) => {
     e.preventDefault();
-    const eventData = {
-      name: eventName,
-      category: eventCategory,
-      time: eventTime,
-      place: eventPlace,
-      photo: eventPhoto,
-      organizer_id: user.id,
-    };
 
     try {
       const response = await fetch("api/events", {
@@ -77,14 +69,18 @@ const Profile = ({ user, handleLogout }) => {
         throw new Error("Failed to create event");
       }
 
-      setEventName("");
-      setEventCategory("");
-      setEventTime("");
-      setEventPlace("");
-      setEventPhoto("");
-      setEventCreated(true);
+      // Clear input fields after successful creation
+      setEventData({
+        name: "",
+        category: "",
+        time: "",
+        place: "",
+        photo: "",
+      });
 
+      // Fetch updated list of events after creating a new event
       fetchUserEvents();
+      setEventCreated(true);
     } catch (error) {
       console.error("Error creating event:", error);
       setEventCreated(false);
@@ -101,6 +97,7 @@ const Profile = ({ user, handleLogout }) => {
         throw new Error("Failed to delete event");
       }
 
+      // Fetch updated list of events after deleting an event
       fetchUserEvents();
     } catch (error) {
       console.error("Error deleting event:", error);
@@ -109,45 +106,44 @@ const Profile = ({ user, handleLogout }) => {
 
   const handleEditClick = (event) => {
     setEventToEdit(event);
-    setEventName(event.name);
-    setEventCategory(event.category);
-    setEventTime(event.time);
-    setEventPlace(event.place);
-    setEventPhoto(event.photo);
+    setEventData({
+      name: event.name,
+      category: event.category,
+      time: event.time,
+      place: event.place,
+      photo: event.photo,
+    });
   };
 
   const handleEventUpdate = async (e) => {
     e.preventDefault();
-    const updatedEventData = {
-      id: eventToEdit.id,
-      name: eventName,
-      category: eventCategory,
-      time: eventTime,
-      place: eventPlace,
-      photo: eventPhoto,
-      organizer_id: user.id,
-    };
+
+    const { id } = eventToEdit;
 
     try {
-      const response = await fetch(`api/events/${eventToEdit.id}`, {
+      const response = await fetch(`api/events/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(updatedEventData),
+        body: JSON.stringify(eventData),
       });
 
       if (!response.ok) {
         throw new Error("Failed to update event");
       }
 
-      setEventName("");
-      setEventCategory("");
-      setEventTime("");
-      setEventPlace("");
-      setEventPhoto("");
+      // Clear input fields and reset eventToEdit after successful update
+      setEventData({
+        name: "",
+        category: "",
+        time: "",
+        place: "",
+        photo: "",
+      });
       setEventToEdit(null);
 
+      // Fetch updated list of events after updating an event
       fetchUserEvents();
     } catch (error) {
       console.error("Error updating event:", error);
@@ -185,18 +181,19 @@ const Profile = ({ user, handleLogout }) => {
           <div className="col-lg-8 col-md-7">
             <div className="card mb-3">
               <div className="card-body">
-                <h3 className="mb-4">Sukurti naują renginį</h3>
-                <form
-                  onSubmit={eventToEdit ? handleEventUpdate : handleEventCreate}
-                >
+                <h3 className="mb-4">
+                  {eventToEdit ? "Redaguoti renginį" : "Sukurti naują renginį"}
+                </h3>
+                <form onSubmit={eventToEdit ? handleEventUpdate : handleEventCreate}>
                   <div className="form-group">
                     <label htmlFor="eventName">Pavadinimas</label>
                     <input
                       type="text"
                       className="form-control"
                       id="eventName"
-                      value={eventName}
-                      onChange={(e) => setEventName(e.target.value)}
+                      name="name"
+                      value={eventData.name}
+                      onChange={handleChange}
                       required
                     />
                   </div>
@@ -205,8 +202,9 @@ const Profile = ({ user, handleLogout }) => {
                     <select
                       className="form-control"
                       id="eventCategory"
-                      value={eventCategory}
-                      onChange={(e) => setEventCategory(e.target.value)}
+                      name="category"
+                      value={eventData.category}
+                      onChange={handleChange}
                       required
                     >
                       <option value="">Pasirinkite kategoriją</option>
@@ -223,8 +221,9 @@ const Profile = ({ user, handleLogout }) => {
                       type="datetime-local"
                       className="form-control"
                       id="eventTime"
-                      value={eventTime}
-                      onChange={(e) => setEventTime(e.target.value)}
+                      name="time"
+                      value={eventData.time}
+                      onChange={handleChange}
                       required
                     />
                   </div>
@@ -234,8 +233,9 @@ const Profile = ({ user, handleLogout }) => {
                       type="text"
                       className="form-control"
                       id="eventPlace"
-                      value={eventPlace}
-                      onChange={(e) => setEventPlace(e.target.value)}
+                      name="place"
+                      value={eventData.place}
+                      onChange={handleChange}
                       required
                     />
                   </div>
@@ -245,12 +245,13 @@ const Profile = ({ user, handleLogout }) => {
                       type="text"
                       className="form-control"
                       id="eventPhoto"
-                      value={eventPhoto}
-                      onChange={(e) => setEventPhoto(e.target.value)}
+                      name="photo"
+                      value={eventData.photo}
+                      onChange={handleChange}
                     />
                   </div>
                   <button type="submit" className="btn btn-primary">
-                    Kurti renginį
+                    {eventToEdit ? "Atnaujinti renginį" : "Kurti renginį"}
                   </button>
                   {eventCreated === true && (
                     <p className="text-success mt-2">
@@ -268,7 +269,43 @@ const Profile = ({ user, handleLogout }) => {
             <div className="card mb-3">
               <div className="card-body">
                 <h3 className="mb-4">Renginiai</h3>
-                <div className="card">
+                {events.map((event) => (
+                  <div className="card mb-3" key={event._id}>
+                    <div className="card-body">
+                      <h5 className="card-title">{event.name}</h5>
+                      <p className="card-text">
+                        <strong>Kategorija:</strong> {event.category}
+                      </p>
+                      <p className="card-text">
+                        <strong>Laikas:</strong> {new Date(event.time).toLocaleString()}
+                      </p>
+                      <p className="card-text">
+                        <strong>Vieta:</strong> {event.place}
+                      </p>
+                      {event.photo && (
+                        <img
+                          src={event.photo}
+                          alt={event.name}
+                          className="img-fluid mb-2"
+                          style={{ maxHeight: "150px" }}
+                        />
+                      )}
+                      <button
+                        className="btn btn-primary mr-2"
+                        onClick={() => handleEditClick(event)}
+                      >
+                        Redaguoti
+                      </button>
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => handleEventDelete(event._id)}
+                      >
+                        Ištrinti
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                <div className="card mb-3">
                   <div className="card-body">
                     <h5 className="card-title">{staticPost.title}</h5>
                     <p className="card-text">{staticPost.content}</p>
@@ -276,7 +313,7 @@ const Profile = ({ user, handleLogout }) => {
                       <strong>Kategorija:</strong> {staticPost.category}
                     </p>
                     <p className="card-text">
-                      <strong>Laikas:</strong> {staticPost.time}
+                      <strong>Laikas:</strong> {new Date(staticPost.time).toLocaleString()}
                     </p>
                     <p className="card-text">
                       <strong>Vieta:</strong> {staticPost.place}
@@ -290,12 +327,6 @@ const Profile = ({ user, handleLogout }) => {
                       />
                     )}
                   </div>
-                  <button type="submit" className="btn btn-primary">
-                    Atnaujinti renginį
-                  </button>
-                  <button type="submit" className="btn btn-primary">
-                    Ištrinti renginį
-                  </button>
                 </div>
               </div>
             </div>
@@ -307,10 +338,7 @@ const Profile = ({ user, handleLogout }) => {
 };
 
 Profile.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    email: PropTypes.string.isRequired,
-  }),
+  user: PropTypes.object,
   handleLogout: PropTypes.func.isRequired,
 };
 
