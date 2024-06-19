@@ -2,9 +2,8 @@ import "./styles/NavBar.css";
 import "./styles/Footer.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 
-import React, { useState } from "react";
-
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const Home = () => {
   const [eventCards, setEventCards] = useState([
@@ -13,6 +12,7 @@ const Home = () => {
       title: "Vasaros Muzikos Festivalis",
       date: "2024-07-20",
       location: "Miesto parkas",
+      category: "Muzika",
       rating: 5,
       votes: [],
     },
@@ -21,6 +21,7 @@ const Home = () => {
       title: "Maisto automobilių mugė",
       date: "2024-08-15",
       location: "Centrinis aikštė",
+      category: "Maistas",
       rating: 5,
       votes: [],
     },
@@ -29,10 +30,22 @@ const Home = () => {
       title: "Menų paroda",
       date: "2024-09-05",
       location: "Menų galerija",
+      category: "Menai",
       rating: 5,
       votes: [],
     },
   ]);
+
+  const [selectedCategory, setSelectedCategory] = useState("Visi");
+  const [selectedTime, setSelectedTime] = useState("Visi");
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const handleTimeChange = (time) => {
+    setSelectedTime(time);
+  };
 
   const handleVote = (eventId, rating) => {
     const updatedEvents = eventCards.map((event) => {
@@ -64,6 +77,12 @@ const Home = () => {
     alignItems: "center",
   };
 
+  const categories = [
+    "Visi",
+    ...new Set(eventCards.map((event) => event.category)),
+  ];
+  const times = ["Visi", "Rugpjūtis", "Rugsėjis", "Spalis"]; // Example times
+
   return (
     <div style={homeContainerStyle} className="home-container">
       <nav className="navbar">
@@ -89,41 +108,73 @@ const Home = () => {
             </li>
           </ul>
         </div>
+        <div className="navbar-filters">
+          <select
+            value={selectedCategory}
+            onChange={(e) => handleCategoryChange(e.target.value)}
+          >
+            {categories.map((category, index) => (
+              <option key={index} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+          <select
+            value={selectedTime}
+            onChange={(e) => handleTimeChange(e.target.value)}
+          >
+            {times.map((time, index) => (
+              <option key={index} value={time}>
+                {time}
+              </option>
+            ))}
+          </select>
+        </div>
       </nav>
       <div className="content">
         <h1>Sveikas atvykęs į Miesto Renginiai!</h1>
         <p>Jaukis lyg namuose</p>
 
         <div className="event-cards">
-          {eventCards.map((event) => (
-            <div key={event.id} className="card">
-              <div className="card-header">
-                <span className="event-rating">
-                  <i className="fas fa-star"></i> {event.rating} (
-                  {event.votes.length} balsai)
-                </span>
-              </div>
-              <div className="card-body">
-                <h5 className="card-title">{event.title}</h5>
-                <p className="card-text">
-                  <strong>Data:</strong> {event.date}
-                  <br />
-                  <strong>Vieta:</strong> {event.location}
-                </p>
-                <div className="rating-buttons">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      onClick={() => handleVote(event.id, star)}
-                      className="btn btn-outline-primary"
-                    >
-                      {star} <i className="fas fa-star"></i>
-                    </button>
-                  ))}
+          {eventCards
+            .filter(
+              (event) =>
+                selectedCategory === "Visi" ||
+                event.category === selectedCategory
+            )
+            .filter(
+              (event) =>
+                selectedTime === "Visi" || event.date.includes(selectedTime)
+            )
+            .map((event) => (
+              <div key={event.id} className="card">
+                <div className="card-header">
+                  <span className="event-rating">
+                    <i className="fas fa-star"></i> {event.rating} (
+                    {event.votes.length} balsai)
+                  </span>
+                </div>
+                <div className="card-body">
+                  <h5 className="card-title">{event.title}</h5>
+                  <p className="card-text">
+                    <strong>Data:</strong> {event.date}
+                    <br />
+                    <strong>Vieta:</strong> {event.location}
+                  </p>
+                  <div className="rating-buttons">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        onClick={() => handleVote(event.id, star)}
+                        className="btn btn-outline-primary"
+                      >
+                        {star} <i className="fas fa-star"></i>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
       <footer className="footer">
