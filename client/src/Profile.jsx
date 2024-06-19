@@ -41,9 +41,9 @@ const Profile = ({ user, handleLogout }) => {
                 <h2 style={{ color: "black", marginBottom: "10px" }}>
                   {user.email}
                 </h2>
-                <p>Email: {user.email}</p>
+                <p>El. paštas: {user.email}</p>
                 <button className="btn btn-primary mt-3" onClick={handleLogout}>
-                  Logout
+                  Atsijungti
                 </button>
               </div>
             </div>
