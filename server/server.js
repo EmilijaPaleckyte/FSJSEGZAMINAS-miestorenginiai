@@ -20,7 +20,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173"], // Update with your frontend URL
     methods: ["POST", "GET", "PUT"],
     credentials: true,
   })
@@ -253,33 +253,6 @@ app.post(
       res.json({
         Status: "Success",
         Message: `User with id ${userId} promoted to admin`,
-      });
-    });
-  }
-);
-
-// Create category route (admin function)
-app.post(
-  "/admin/categories",
-  verifyToken,
-  verifyRole(ROLES.ADMIN),
-  (req, res) => {
-    const { name } = req.body;
-
-    if (!name) {
-      return res.status(400).json({ Error: "Category name is required" });
-    }
-
-    const sql = "INSERT INTO categories (name) VALUES (?)";
-
-    db.query(sql, [name], (err, result) => {
-      if (err) {
-        return handleDatabaseError(err, res, "Error creating category");
-      }
-      console.log("Category created successfully");
-      res.status(201).json({
-        Status: "Success",
-        Message: `Category '${name}' created successfully`,
       });
     });
   }

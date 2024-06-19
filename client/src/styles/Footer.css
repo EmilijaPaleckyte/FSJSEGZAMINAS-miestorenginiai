@@ -3,9 +3,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  background: rgba(200, 200, 200, 0.5);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(200, 200, 200, 0.5); 
   border-top: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   flex-direction: column;
@@ -15,6 +13,13 @@
   box-sizing: border-box;
   z-index: 1000;
   text-align: center;
+
+  /* Backdrop-filter for supporting browsers */
+  @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+    background: rgba(200, 200, 200, 0.5); /* Fallback background color */
+    -webkit-backdrop-filter: blur(10px); /* Safari */
+    backdrop-filter: blur(10px); /* Standard */
+  }
 }
 
 .footer-logo a {
