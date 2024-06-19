@@ -1,6 +1,6 @@
 import "./styles/NavBar.css";
 import "./styles/Footer.css";
-import "./styles/Contacts.css"; // Ensure Contacts.css or appropriate styling is imported
+import "./styles/Contacts.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 
 import { Link } from "react-router-dom";

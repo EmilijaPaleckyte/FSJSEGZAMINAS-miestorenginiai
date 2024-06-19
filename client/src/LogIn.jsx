@@ -17,7 +17,7 @@ const LogIn = ({ setUser, setAuthorizationLevel }) => {
         console.log("Server response:", res.data);
         if (res.data.Status === "Success") {
           const userData = {
-            email: values.email, // Email is set here
+            email: values.email, 
             role: res.data.Role,
             isAdmin: res.data.isAdmin,
           };

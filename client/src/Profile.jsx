@@ -15,13 +15,12 @@ const Profile = ({ user, handleLogout }) => {
   const [eventCreated, setEventCreated] = useState(null);
   const [categories, setCategories] = useState([]);
   const [staticPost, setStaticPost] = useState({
-    // title: "Naujenu Svente",
-    // content:
-    //   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac lacinia lectus. Integer in est ipsum. Duis sit amet purus nec purus sollicitudin auctor. Nulla non orci a nisl auctor accumsan. Duis scelerisque egestas ante, vitae eleifend nisl lacinia ut.",
-    // category: "Kiti",
-    // time: "2024-06-19T12:00",
-    // place: "Internet",
-    // photo: "https://via.placeholder.com/150",
+    title: "Naujenu Svente",
+    content: "This is some sort of a caption",
+    category: "Kiti",
+    time: "2024-06-19T12:00",
+    place: "Internet",
+    photo: "not uploaded",
   });
 
   useEffect(() => {
@@ -171,7 +170,7 @@ const Profile = ({ user, handleLogout }) => {
                   src={pfp}
                   alt="User Profile"
                   className="rounded-circle mb-3"
-                  style={{ width: "150px", height: "150px" }}
+                  style={{ width: "120px", height: "120px" }}
                 />
                 <h2>{user.email}</h2>
                 <p>El. paštas: {user.email}</p>
@@ -252,7 +251,7 @@ const Profile = ({ user, handleLogout }) => {
                     />
                   </div>
                   <button type="submit" className="btn btn-primary">
-                    {eventToEdit ? "Atnaujinti renginį" : "Kurti renginį"}
+                    Kurti renginį
                   </button>
                   {eventCreated === true && (
                     <p className="text-success mt-2">
@@ -292,6 +291,12 @@ const Profile = ({ user, handleLogout }) => {
                       />
                     )}
                   </div>
+                  <button type="submit" className="btn btn-primary">
+                    Atnaujinti renginį
+                  </button>
+                  <button type="submit" className="btn btn-primary">
+                    Ištrinti renginį
+                  </button>
                 </div>
               </div>
             </div>

@@ -15,7 +15,7 @@ EMAIL/PAŠTAS: businka@gmail.com
 PASSWORD/SLAPTAŽODIS: slaptabusinka
 ROLĖ: user
 
-- Admin/Administratorius:
+- Admin/Administratorius (Panelė: /admindash):
 
 SLAPYVARDIS: adminas
 EMAIL/PAŠTAS: adminas@example.com

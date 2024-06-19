@@ -70,7 +70,6 @@ function App() {
             )
           }
         />
-        {/* Redirect to login if user tries to access admin route without sufficient authorization */}
         <Route
           path="/admin"
           element={
