@@ -145,15 +145,15 @@ const AdminDashboard = () => {
 
   return (
     <div className="container">
-      <h2>Admin Dashboard</h2>
+      <h2>Admin(istratoriai)</h2>
 
-      <h3>Users:</h3>
+      <h3>Vartotojai:</h3>
       <table className="table">
         <thead>
           <tr>
-            <th className="th">Username</th>
-            <th className="th">Email</th>
-            <th className="th">Role</th>
+            <th className="th">Slapyvardis</th>
+            <th className="th">El. paštas</th>
+            <th className="th">Rolė</th>
           </tr>
         </thead>
         <tbody>
@@ -194,18 +194,18 @@ const AdminDashboard = () => {
       </table>
 
       <div>
-        <h3>Events:</h3>
+        <h3>Renginiai:</h3>
         <table className="table">
           <thead>
             <tr>
-              <th className="th">Title</th>
-              <th className="th">Category</th>
+              <th className="th">Pavadinimas</th>
+              <th className="th">Kategorija</th>
             </tr>
           </thead>
           <tbody>
             {events.length === 0 && (
               <tr>
-                <td colSpan="4">No events</td>
+                <td colSpan="4">Nieko nebuvo rasta</td>
               </tr>
             )}
             {events.map((event) => (
@@ -237,21 +237,21 @@ const AdminDashboard = () => {
         </table>
 
         <div>
-          <h3>Create Category:</h3>
+          <h3>Kategorija</h3>
           <input
             type="text"
             value={newCategoryName}
             onChange={(e) => setNewCategoryName(e.target.value)}
-            placeholder="Enter new category name"
+            placeholder="Kategorijos Pavadinimas"
           />
           <button className="button" onClick={handleCreateCategory}>
-            Create Category
+            Sukurti Kategorija
           </button>
         </div>
 
-        <h3>Categories:</h3>
+        <h3>Kategorijos:</h3>
         <ul>
-          {categories.length === 0 && <li>No categories</li>}
+          {categories.length === 0 && <li>Nieko nebuvo rasta</li>}
           {categories.map((category) => (
             <li key={category.id}>{category.name}</li>
           ))}
