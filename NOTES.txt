@@ -1,7 +1,7 @@
 UZDUOTIS - psl miesto gyventojams ir sveciams rast info apie mieste vykstancius renginius, juos sklebti ir ivertinti
 
 PAGAL roles galios - autorizacija ir pvz jei nori paziureti rengini turi prisijungti mesti, jei prisijunges mato (3 punktas)
-test gmail, password admino ir userio ideti i readme
+test gmail, password admino ir userio ideti i readme, edit read me nepamirsti
 
 tada pridet user (guest neprisededa), admin ir tada see ar veikia
 make sure kad admine loggina usersius ir actions jc nereik
