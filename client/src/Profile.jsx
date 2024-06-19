@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import pfp from "./assets/pfp.png";
 
@@ -45,6 +46,9 @@ const Profile = ({ user, handleLogout }) => {
                 <button className="btn btn-primary mt-3" onClick={handleLogout}>
                   Atsijungti
                 </button>
+                <Link to="/" className="btn btn-primary mt-3">
+                  Į pagrindinį
+                </Link>
               </div>
             </div>
           </div>

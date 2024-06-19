@@ -13,11 +13,13 @@ Vartotojai:
 SLAPYVARDIS: businka
 EMAIL/PAŠTAS: businka@gmail.com
 PASSWORD/SLAPTAŽODIS: slaptabusinka
+ROLĖ: user
 
 - Admin/Administratorius:
 
-SLAPYVARDIS:
-EMAIL/PAŠTAS: 
-PASSWORD/SLAPTAŽODIS: 
+SLAPYVARDIS: adminas
+EMAIL/PAŠTAS: adminas@example.com
+PASSWORD/SLAPTAŽODIS: adminasz
+ROLĖ: admin
 
 Paaiškinimas: Admin Dashboard yra anglų k., kad parodytų, jog čia yra sistemos funkcionalumas.
