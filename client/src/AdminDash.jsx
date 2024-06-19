@@ -251,7 +251,9 @@ const AdminDashboard = () => {
 
         <h3>Kategorijos:</h3>
         <ul>
-          {categories.length === 0 && <li>Nieko nebuvo rasta</li>}
+        <h3>Muzika</h3>
+        <h3>Maistas</h3>
+        <h3>Menai</h3>
           {categories.map((category) => (
             <li key={category.id}>{category.name}</li>
           ))}
