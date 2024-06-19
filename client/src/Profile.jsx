@@ -30,7 +30,7 @@ const Profile = ({ user, handleLogout }) => {
 
   const fetchUserEvents = async () => {
     try {
-      // Replace with actual endpoint to fetch user's events
+    
       const response = await fetch(`api/events?organizer_id=${user.id}`);
       if (!response.ok) {
         throw new Error("Failed to fetch events");
@@ -43,7 +43,6 @@ const Profile = ({ user, handleLogout }) => {
   };
 
   const fetchEventCategories = async () => {
-    // Replace with actual endpoint to fetch categories
     const fetchedCategories = [
       { id: 1, name: "Kultūra" },
       { id: 2, name: "Muzika" },
