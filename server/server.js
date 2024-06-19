@@ -20,8 +20,8 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:5173"], 
-    methods: ["POST", "GET", "PUT"],
+    origin: ["http://localhost:5173"],
+    methods: ["POST", "GET", "PUT", "DELETE"],
     credentials: true,
   })
 );
@@ -182,9 +182,14 @@ app.post("/login", (req, res) => {
 });
 
 // Admin dashboard route (accessible only by admin)
-app.get("/admin/dashboard", verifyToken, verifyRole(ROLES.ADMIN), (req, res) => {
-  res.json({ Message: "Welcome to admin dashboard" });
-});
+app.get(
+  "/admin/dashboard",
+  verifyToken,
+  verifyRole(ROLES.ADMIN),
+  (req, res) => {
+    res.json({ Message: "Welcome to admin dashboard" });
+  }
+);
 
 // Fetching all users (admin function)
 app.get("/admin/users", verifyToken, verifyRole(ROLES.ADMIN), (req, res) => {
@@ -200,40 +205,248 @@ app.get("/admin/users", verifyToken, verifyRole(ROLES.ADMIN), (req, res) => {
 });
 
 // Updating user role (admin function)
-app.put("/admin/users/:userId/update-role", verifyToken, verifyRole(ROLES.ADMIN), (req, res) => {
-  const { userId } = req.params;
-  const { role } = req.body;
+app.put(
+  "/admin/users/:userId/update-role",
+  verifyToken,
+  verifyRole(ROLES.ADMIN),
+  (req, res) => {
+    const { userId } = req.params;
+    const { role } = req.body;
 
-  if (!role) {
-    return res.status(400).json({ Error: "Role is required" });
-  }
-
-  const sql = "UPDATE users SET role = ? WHERE id = ?";
-
-  db.query(sql, [role, userId], (err, result) => {
-    if (err) {
-      console.error(`Error updating role for user ${userId}:`, err);
-      return res.status(500).json({ Error: `Error updating role for user ${userId}` });
+    if (!role) {
+      return res.status(400).json({ Error: "Role is required" });
     }
-    res.json({ Status: "Success", Message: `Role updated for user ${userId}` });
+
+    const sql = "UPDATE users SET role = ? WHERE id = ?";
+
+    db.query(sql, [role, userId], (err, result) => {
+      if (err) {
+        console.error(`Error updating role for user ${userId}:`, err);
+        return res
+          .status(500)
+          .json({ Error: `Error updating role for user ${userId}` });
+      }
+      res.json({
+        Status: "Success",
+        Message: `Role updated for user ${userId}`,
+      });
+    });
+  }
+);
+
+// Promote user to admin (admin function)
+app.post(
+  "/admin/users/:userId/promote-to-admin",
+  verifyToken,
+  verifyRole(ROLES.ADMIN),
+  (req, res) => {
+    const { userId } = req.params;
+
+    const sql = "UPDATE users SET role = ? WHERE id = ?";
+    const values = [ROLES.ADMIN, userId];
+
+    db.query(sql, values, (err, result) => {
+      if (err) {
+        return handleDatabaseError(err, res, "Error promoting user to admin");
+      }
+      console.log(`User with id ${userId} promoted to admin`);
+      res.json({
+        Status: "Success",
+        Message: `User with id ${userId} promoted to admin`,
+      });
+    });
+  }
+);
+
+// Fetching all categories (admin function)
+app.get(
+  "/admin/categories",
+  verifyToken,
+  verifyRole(ROLES.ADMIN),
+  (req, res) => {
+    const sql = "SELECT id, name FROM categories";
+
+    db.query(sql, (err, results) => {
+      if (err) {
+        console.error("Error fetching categories:", err);
+        return res.status(500).json({ Error: "Error fetching categories" });
+      }
+      res.json(results);
+    });
+  }
+);
+
+// Creating category (admin function)
+app.post(
+  "/admin/categories",
+  verifyToken,
+  verifyRole(ROLES.ADMIN),
+  (req, res) => {
+    const { name } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ Error: "Category name is required" });
+    }
+
+    const sql = "INSERT INTO categories (name) VALUES (?)";
+
+    db.query(sql, [name], (err, result) => {
+      if (err) {
+        console.error("Error creating category:", err);
+        return res.status(500).json({ Error: "Error creating category" });
+      }
+      res
+        .status(201)
+        .json({ Status: "Success", Message: "Category created successfully" });
+    });
+  }
+);
+
+// Events routes
+
+// Fetching all events (admin function)
+app.get("/admin/events", verifyToken, verifyRole(ROLES.ADMIN), (req, res) => {
+  const sql = "SELECT id, title, category, status FROM events";
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Error fetching events:", err);
+      return res.status(500).json({ Error: "Error fetching events" });
+    }
+    res.json(results);
   });
 });
 
-// Promote user to admin (admin function)
-app.post("/admin/users/:userId/promote-to-admin", verifyToken, verifyRole(ROLES.ADMIN), (req, res) => {
-  const { userId } = req.params;
+// Approving event (admin function)
+app.put(
+  "/admin/events/:eventId/approve",
+  verifyToken,
+  verifyRole(ROLES.ADMIN),
+  (req, res) => {
+    const { eventId } = req.params;
 
-  const sql = "UPDATE users SET role = ? WHERE id = ?";
-  const values = [ROLES.ADMIN, userId];
+    const sql = "UPDATE events SET status = ? WHERE id = ?";
+    const values = ["approved", eventId];
+
+    db.query(sql, values, (err, result) => {
+      if (err) {
+        console.error(`Error approving event ${eventId}:`, err);
+        return res
+          .status(500)
+          .json({ Error: `Error approving event ${eventId}` });
+      }
+      res.json({
+        Status: "Success",
+        Message: `Event with id ${eventId} approved`,
+      });
+    });
+  }
+);
+
+// Blocking event (admin function)
+app.put(
+  "/admin/events/:eventId/block",
+  verifyToken,
+  verifyRole(ROLES.ADMIN),
+  (req, res) => {
+    const { eventId } = req.params;
+
+    const sql = "UPDATE events SET status = ? WHERE id = ?";
+    const values = ["blocked", eventId];
+
+    db.query(sql, values, (err, result) => {
+      if (err) {
+        console.error(`Error blocking event ${eventId}:`, err);
+        return res
+          .status(500)
+          .json({ Error: `Error blocking event ${eventId}` });
+      }
+      res.json({
+        Status: "Success",
+        Message: `Event with id ${eventId} blocked`,
+      });
+    });
+  }
+);
+
+// Create new event (admin function)
+app.post("/admin/events", verifyToken, verifyRole(ROLES.ADMIN), (req, res) => {
+  const { title, category } = req.body;
+
+  if (!title || !category) {
+    return res.status(400).json({ Error: "Title and category are required" });
+  }
+
+  const sql = "INSERT INTO events (title, category, status) VALUES (?, ?, ?)";
+  const values = [title, category, "pending"];
 
   db.query(sql, values, (err, result) => {
     if (err) {
-      return handleDatabaseError(err, res, "Error promoting user to admin");
+      console.error("Error creating event:", err);
+      return res.status(500).json({ Error: "Error creating event" });
     }
-    console.log(`User with id ${userId} promoted to admin`);
-    res.json({ Status: "Success", Message: `User with id ${userId} promoted to admin` });
+    res
+      .status(201)
+      .json({ Status: "Success", Message: "Event created successfully" });
   });
 });
+
+// Update event (admin function)
+app.put(
+  "/admin/events/:eventId",
+  verifyToken,
+  verifyRole(ROLES.ADMIN),
+  (req, res) => {
+    const { eventId } = req.params;
+    const { title, category } = req.body;
+
+    if (!title || !category) {
+      return res.status(400).json({ Error: "Title and category are required" });
+    }
+
+    const sql = "UPDATE events SET title = ?, category = ? WHERE id = ?";
+    const values = [title, category, eventId];
+
+    db.query(sql, values, (err, result) => {
+      if (err) {
+        console.error(`Error updating event ${eventId}:`, err);
+        return res
+          .status(500)
+          .json({ Error: `Error updating event ${eventId}` });
+      }
+      res.json({
+        Status: "Success",
+        Message: `Event with id ${eventId} updated`,
+      });
+    });
+  }
+);
+
+// Delete event (admin function)
+app.delete(
+  "/admin/events/:eventId",
+  verifyToken,
+  verifyRole(ROLES.ADMIN),
+  (req, res) => {
+    const { eventId } = req.params;
+
+    const sql = "DELETE FROM events WHERE id = ?";
+    const values = [eventId];
+
+    db.query(sql, values, (err, result) => {
+      if (err) {
+        console.error(`Error deleting event ${eventId}:`, err);
+        return res
+          .status(500)
+          .json({ Error: `Error deleting event ${eventId}` });
+      }
+      res.json({
+        Status: "Success",
+        Message: `Event with id ${eventId} deleted`,
+      });
+    });
+  }
+);
 
 // Start server
 app.listen(port, () => {
