@@ -23,7 +23,7 @@ const Profile = ({ user, handleLogout }) => {
     { id: 5, name: "Kiti" },
   ]);
   const staticPost = {
-    title: "Naujenu Svente",
+    title: "Naujienu Svente",
     content: "This is some sort of a caption",
     category: "Kiti",
     time: "2024-06-19T12:00",
