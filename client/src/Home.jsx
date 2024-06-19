@@ -81,7 +81,21 @@ const Home = () => {
     "Visi",
     ...new Set(eventCards.map((event) => event.category)),
   ];
-  const times = ["Visi", "Rugpjūtis", "Rugsėjis", "Spalis"]; // Example times
+  const months = [
+    "Visi",
+    "Sausis",
+    "Vasaris",
+    "Kovas",
+    "Balandis",
+    "Gegužė",
+    "Birželis",
+    "Liepa",
+    "Rugpjūtis",
+    "Rugsėjis",
+    "Spalis",
+    "Lapkritis",
+    "Gruodis",
+  ];
 
   return (
     <div style={homeContainerStyle} className="home-container">
@@ -123,9 +137,9 @@ const Home = () => {
             value={selectedTime}
             onChange={(e) => handleTimeChange(e.target.value)}
           >
-            {times.map((time, index) => (
-              <option key={index} value={time}>
-                {time}
+            {months.map((month, index) => (
+              <option key={index} value={month}>
+                {month}
               </option>
             ))}
           </select>

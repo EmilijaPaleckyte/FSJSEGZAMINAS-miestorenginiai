@@ -1,17 +1,6 @@
-UZDUOTIS - psl miesto gyventojams ir sveciams rast info apie mieste vykstancius renginius, juos sklebti ir ivertinti
-
-PAGAL roles galios - autorizacija ir pvz jei nori paziureti rengini turi prisijungti mesti, jei prisijunges mato (3 punktas)
-
-make sure kad admine loggina usersius ir actions jc nereik
+make sure kad admine loggina stuff
+daugiau prie renginio prideti kuris meta i sign up jeigu neprisiloggine
 
 admin - gali patvirtinti rengini, blokuoti netinkama turini ir Vartotojus, ivesti renginiu kategorijas.
 user - gali prideti rengini: nurodydamas pavadinima, kategorija, laika, vieta, nuotrauka, gali koreguoti savo skelbimus, juos istrinti, 
 zvaogzdute korteles desineje - pauspaudimas issaugomas db, virs jos (zvaigzd) sumuojamas bendras reitingas/ paspaudinu skaicius.
-
-FRONTEND: 
-responsive
-filtas pagal kategorijas ir renginio laika 
-
-issipdyti svrb ne look
-
-divide visa server -jiegu bus laiko
