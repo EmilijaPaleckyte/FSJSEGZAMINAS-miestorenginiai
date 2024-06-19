@@ -21,5 +21,3 @@ SLAPYVARDIS: adminas
 EMAIL/PAŠTAS: adminas@example.com
 PASSWORD/SLAPTAŽODIS: adminasz
 ROLĖ: admin
-
-Paaiškinimas: Admin Dashboard yra anglų k., kad parodytų, jog čia yra sistemos funkcionalumas.

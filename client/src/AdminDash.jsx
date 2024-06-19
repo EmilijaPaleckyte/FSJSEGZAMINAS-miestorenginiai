@@ -22,7 +22,10 @@ const AdminDashboard = () => {
       });
       setUsers(response.data);
     } catch (error) {
-      console.error("Error fetching users:", error.response?.data || error);
+      console.error(
+        "Klaida gaunant vartotojus:",
+        error.response?.data || error
+      );
     }
   };
 
@@ -33,7 +36,7 @@ const AdminDashboard = () => {
       });
       setEvents(response.data);
     } catch (error) {
-      console.error("Error fetching events:", error.response?.data || error);
+      console.error("Klaida gaunant įvykius:", error.response?.data || error);
     }
   };
 
@@ -48,7 +51,7 @@ const AdminDashboard = () => {
       setCategories(response.data);
     } catch (error) {
       console.error(
-        "Error fetching categories:",
+        "Klaida gaunant kategorijas:",
         error.response?.data || error
       );
     }
@@ -56,7 +59,7 @@ const AdminDashboard = () => {
 
   const handleUpdateRole = async (userId, newRole) => {
     if (!newRole) {
-      alert("Role is required");
+      alert("Reikia nurodyti rolę");
       return;
     }
 
@@ -67,10 +70,10 @@ const AdminDashboard = () => {
         { withCredentials: true }
       );
       console.log(response.data);
-      fetchUsers(); // Refresh the users list
+      fetchUsers(); // Atnaujinti vartotojų sąrašą
     } catch (error) {
       console.error(
-        `Error updating role for user ${userId}:`,
+        `Klaida atnaujinant vartotojo rolę ${userId}:`,
         error.response?.data || error
       );
     }
@@ -84,10 +87,10 @@ const AdminDashboard = () => {
         { withCredentials: true }
       );
       console.log(response.data);
-      fetchUsers(); // Refresh the users list
+      fetchUsers(); // Atnaujinti vartotojų sąrašą
     } catch (error) {
       console.error(
-        `Error promoting user ${userId} to admin:`,
+        `Klaida paskiriant vartotoją ${userId} kaip administratorių:`,
         error.response?.data || error
       );
     }
@@ -101,10 +104,10 @@ const AdminDashboard = () => {
         { withCredentials: true }
       );
       console.log(response.data);
-      fetchEvents(); // Refresh the events list
+      fetchEvents(); // Atnaujinti įvykių sąrašą
     } catch (error) {
       console.error(
-        `Error approving event ${eventId}:`,
+        `Klaida patvirtinant įvykį ${eventId}:`,
         error.response?.data || error
       );
     }
@@ -118,17 +121,17 @@ const AdminDashboard = () => {
         { withCredentials: true }
       );
       console.log(response.data);
-      fetchEvents(); // Refresh the events list
+      fetchEvents(); // Atnaujinti įvykių sąrašą
     } catch (error) {
       console.error(
-        `Error blocking event ${eventId}:`,
+        `Klaida blokuojant įvykį ${eventId}:`,
         error.response?.data || error
       );
     }
   };
 
   const handleCreateCategory = async () => {
-    const categoryName = prompt("Enter new category name:");
+    const categoryName = prompt("Įveskite naujos kategorijos pavadinimą:");
     if (!categoryName) return;
 
     try {
@@ -138,24 +141,27 @@ const AdminDashboard = () => {
         { withCredentials: true }
       );
       console.log(response.data);
-      fetchCategories(); // Refresh the categories list
+      fetchCategories(); // Atnaujinti kategorijų sąrašą
     } catch (error) {
-      console.error("Error creating category:", error.response?.data || error);
+      console.error(
+        "Klaida kuriant kategoriją:",
+        error.response?.data || error
+      );
     }
   };
 
   return (
     <div className="container">
-      <h2>Admin Dashboard</h2>
+      <h2>Administratoriaus skydas</h2>
 
-      <h3>Users:</h3>
+      <h3>Vartotojai:</h3>
       <table className="table">
         <thead>
           <tr>
-            <th className="th">Username</th>
-            <th className="th">Email</th>
-            <th className="th">Role</th>
-            <th className="th">Actions</th>
+            <th className="th">Vartotojo vardas</th>
+            <th className="th">El. paštas</th>
+            <th className="th">Rolė</th>
+            <th className="th">Veiksmai</th>
           </tr>
         </thead>
         <tbody>
@@ -171,13 +177,13 @@ const AdminDashboard = () => {
                       className="button"
                       onClick={() => handleUpdateRole(user.id, "admin")}
                     >
-                      Make Admin
+                      Paskirti administratoriumi
                     </button>
                     <button
                       className="button"
                       onClick={() => handleUpdateRole(user.id, "user")}
                     >
-                      Make User
+                      Paskirti vartotoju
                     </button>
                   </>
                 )}
@@ -186,7 +192,7 @@ const AdminDashboard = () => {
                     className="button"
                     onClick={() => handlePromoteToAdmin(user.id)}
                   >
-                    Promote to Admin
+                    Paskirti administratoriumi
                   </button>
                 )}
               </td>
@@ -196,20 +202,20 @@ const AdminDashboard = () => {
       </table>
 
       <div>
-        <h3>Events:</h3>
+        <h3>Įvykiai:</h3>
         <table className="table">
           <thead>
             <tr>
-              <th className="th">Title</th>
-              <th className="th">Category</th>
-              <th className="th">Status</th>
-              <th className="th">Actions</th>
+              <th className="th">Pavadinimas</th>
+              <th className="th">Kategorija</th>
+              <th className="th">Būsena</th>
+              <th className="th">Veiksmai</th>
             </tr>
           </thead>
           <tbody>
             {events.length === 0 && (
               <tr>
-                <td colSpan="4">No events available</td>
+                <td colSpan="4">Nėra įvykių</td>
               </tr>
             )}
             {events.map((event) => (
@@ -224,13 +230,13 @@ const AdminDashboard = () => {
                         className="button"
                         onClick={() => handleApproveEvent(event.id)}
                       >
-                        Approve
+                        Patvirtinti
                       </button>
                       <button
                         className="button"
                         onClick={() => handleBlockEvent(event.id)}
                       >
-                        Block
+                        Blokuoti
                       </button>
                     </>
                   )}
@@ -241,12 +247,12 @@ const AdminDashboard = () => {
         </table>
 
         <button className="button" onClick={handleCreateCategory}>
-          Create Category
+          Sukurti kategoriją
         </button>
 
-        <h3>Categories:</h3>
+        <h3>Kategorijos:</h3>
         <ul>
-          {categories.length === 0 && <li>No categories available</li>}
+          {categories.length === 0 && <li>Nėra kategorijų</li>}
           {categories.map((category) => (
             <li key={category.id}>{category.name}</li>
           ))}
