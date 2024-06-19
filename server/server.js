@@ -20,7 +20,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:5173"], // Update with your frontend URL
+    origin: ["http://localhost:5173"], 
     methods: ["POST", "GET", "PUT"],
     credentials: true,
   })
@@ -182,14 +182,9 @@ app.post("/login", (req, res) => {
 });
 
 // Admin dashboard route (accessible only by admin)
-app.get(
-  "/admin/dashboard",
-  verifyToken,
-  verifyRole(ROLES.ADMIN),
-  (req, res) => {
-    res.json({ Message: "Welcome to admin dashboard" });
-  }
-);
+app.get("/admin/dashboard", verifyToken, verifyRole(ROLES.ADMIN), (req, res) => {
+  res.json({ Message: "Welcome to admin dashboard" });
+});
 
 // Fetching all users (admin function)
 app.get("/admin/users", verifyToken, verifyRole(ROLES.ADMIN), (req, res) => {
@@ -205,58 +200,40 @@ app.get("/admin/users", verifyToken, verifyRole(ROLES.ADMIN), (req, res) => {
 });
 
 // Updating user role (admin function)
-app.put(
-  "/admin/users/:userId/update-role",
-  verifyToken,
-  verifyRole(ROLES.ADMIN),
-  (req, res) => {
-    const { userId } = req.params;
-    const { role } = req.body;
+app.put("/admin/users/:userId/update-role", verifyToken, verifyRole(ROLES.ADMIN), (req, res) => {
+  const { userId } = req.params;
+  const { role } = req.body;
 
-    if (!role) {
-      return res.status(400).json({ Error: "Role is required" });
-    }
-
-    const sql = "UPDATE users SET role = ? WHERE id = ?";
-
-    db.query(sql, [role, userId], (err, result) => {
-      if (err) {
-        console.error(`Error updating role for user ${userId}:`, err);
-        return res
-          .status(500)
-          .json({ Error: `Error updating role for user ${userId}` });
-      }
-      res.json({
-        Status: "Success",
-        Message: `Role updated for user ${userId}`,
-      });
-    });
+  if (!role) {
+    return res.status(400).json({ Error: "Role is required" });
   }
-);
+
+  const sql = "UPDATE users SET role = ? WHERE id = ?";
+
+  db.query(sql, [role, userId], (err, result) => {
+    if (err) {
+      console.error(`Error updating role for user ${userId}:`, err);
+      return res.status(500).json({ Error: `Error updating role for user ${userId}` });
+    }
+    res.json({ Status: "Success", Message: `Role updated for user ${userId}` });
+  });
+});
 
 // Promote user to admin (admin function)
-app.post(
-  "/admin/users/:userId/promote-to-admin",
-  verifyToken,
-  verifyRole(ROLES.ADMIN),
-  (req, res) => {
-    const { userId } = req.params;
+app.post("/admin/users/:userId/promote-to-admin", verifyToken, verifyRole(ROLES.ADMIN), (req, res) => {
+  const { userId } = req.params;
 
-    const sql = "UPDATE users SET role = ? WHERE id = ?";
-    const values = [ROLES.ADMIN, userId];
+  const sql = "UPDATE users SET role = ? WHERE id = ?";
+  const values = [ROLES.ADMIN, userId];
 
-    db.query(sql, values, (err, result) => {
-      if (err) {
-        return handleDatabaseError(err, res, "Error promoting user to admin");
-      }
-      console.log(`User with id ${userId} promoted to admin`);
-      res.json({
-        Status: "Success",
-        Message: `User with id ${userId} promoted to admin`,
-      });
-    });
-  }
-);
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      return handleDatabaseError(err, res, "Error promoting user to admin");
+    }
+    console.log(`User with id ${userId} promoted to admin`);
+    res.json({ Status: "Success", Message: `User with id ${userId} promoted to admin` });
+  });
+});
 
 // Start server
 app.listen(port, () => {
